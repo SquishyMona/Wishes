@@ -2,15 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-
-@font-face {
-  font-family: 'TenorSans';
-  src: url("https://fonts.googleapis.com/css2?family=Tenor+Sans&display=swap");
-}
-
 h1 {
   font-family: var(--font-tenor-sans);
   color: white;
+}
+
+a {
+  font-family: var(--font-asap);
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
 
 @layer utilities {
