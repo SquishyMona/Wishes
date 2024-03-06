@@ -1,9 +1,20 @@
+"use client";
+
 import Image from "next/image";
 
 export default function Navigation() {
+  const openDrawer = () => {
+    const checkbox: HTMLInputElement | null = document.getElementById('wishes-drawer-toggle') as HTMLInputElement;
+    checkbox?.checked ? checkbox.checked = false : checkbox.checked = true;
+  }
+
   return (
     <nav className="navbar bg-base-100">
-      <div className="navbar-start"></div>
+      <div className="navbar-start">
+          <button onClick={openDrawer} tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
+          </button>
+      </div>
       <div className="navbar-center">
         <a href="/" className="btn btn-ghost h-20">
           <Image src="/logo.png" alt="Logo" width={70} height={70} />
@@ -18,8 +29,8 @@ export default function Navigation() {
             </div>
           </div>
           <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
-            <li><a>Settings</a></li>
-            <li><a>Log Out</a></li>
+            <li><a className="text-lg">Settings</a></li>
+            <li><a className="text-lg">Log Out</a></li>
           </ul>
         </div>
       </div>
