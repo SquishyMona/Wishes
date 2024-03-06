@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Navigation() {
   const openDrawer = () => {
@@ -11,7 +12,7 @@ export default function Navigation() {
   return (
     <nav className="navbar bg-base-100">
       <div className="navbar-start">
-          <button onClick={openDrawer} tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+          <button onClick={openDrawer} tabIndex={0} role="button" className="btn btn-ghost btn-circle md:hidden">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
           </button>
       </div>
@@ -29,8 +30,8 @@ export default function Navigation() {
             </div>
           </div>
           <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
-            <li><a className="text-lg">Settings</a></li>
-            <li><a className="text-lg">Log Out</a></li>
+            <li><Link className="text-lg" href="/settings">Settings</Link></li>
+            <li><Link className="text-lg" href="/logout">Log Out</Link></li>
           </ul>
         </div>
       </div>
