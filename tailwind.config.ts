@@ -11,7 +11,7 @@ const config: Config = {
   daisyui: {
     themes: [
       {
-        mytheme: { 
+        mydarktheme: { 
           "primary": "#3d3d3d",     
           "secondary": "#fef08a",     
           "accent": "#fef9c3",        
@@ -20,6 +20,17 @@ const config: Config = {
           "info": "#60a5fa", 
           "success": "#4ade80", 
           "warning": "#f59e0b", 
+          "error": "#ff5861",
+        },
+        mylighttheme: {         
+          "primary": "#a8a29e",
+          "secondary": "#eab308",                   
+          "accent": "#ca8a04",                   
+          "neutral": "#44403c",                   
+          "base-100": "#f5f5f4",                   
+          "info": "#60a5fa",                   
+          "success": "#4ade80",                 
+          "warning": "#f59e0b",               
           "error": "#ff5861",
         },
       },

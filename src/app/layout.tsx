@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="mytheme">
+    <html lang="en" id="htmlroot" data-theme="mydarktheme">
       <body className={`${inter.className} ${tenor_sans.variable} ${asap.variable}`}>
         <Navigation />
         <div className="h-[80vh]">

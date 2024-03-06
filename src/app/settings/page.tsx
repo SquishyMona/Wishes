@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -5,7 +7,7 @@ export default function Settings() {
     return (
         <div className="flex flex-col items-center">
             <h1 className="text-center text-3xl font-bold my-5">Settings</h1>
-            <div className="flex flex-col items-center bg-primary h-full mx-5 max-md:my-3 rounded-xl text-center p-3">
+            <div className="flex flex-col items-center bg-primary h-full mx-5 max-md:my-3 rounded-xl text-center p-3 min-w-[450px]">
                 <h1 className="text-2xl text-white my-3 font-bold">Profile</h1>
                 <div className="flex flex-col sm:flex-row items-center">
                     <Image src="/accplaceholderdark.png" alt="Account" width={80} height={80} className="m-3" />
@@ -27,6 +29,13 @@ export default function Settings() {
                 <div className="flex flex-col sm:flex-row items-center">
                     <button className="btn btn-secondary m-3">Save Information</button>
                     <button className="btn btn-secondary m-3">Change Password</button>
+                </div>
+            </div>
+            <div className="flex flex-col bg-primary h-full mx-5 max-md:my-3 rounded-xl text-center p-3 min-w-[450px]">
+                <h1 className="text-2xl text-white my-3 font-bold">Preferences</h1>
+                <div className="flex flex-col sm:flex-row items-center mx-5">
+                    <label className="flex items-center gap-2 m-2">Dark Theme</label>
+                    <input type="checkbox" className="toggle toggle-secondary ml-auto" data-toggle-theme="mythemedark, mythemelight"/>
                 </div>
             </div>
         </div>
