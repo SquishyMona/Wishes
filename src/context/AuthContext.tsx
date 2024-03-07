@@ -4,9 +4,18 @@ import React from 'react';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { app } from '@/lib/firebase/config';
 
+interface UserType {
+    email: string | null;
+    uid: string | null;
+    photoURL: string | null;
+    name: string | null;
+}
+
 const auth = getAuth(app);
 
-export const AuthContext = React.createContext({});
+const AuthContext = React.createContext({});
+
+export const useAuth = () => React.useContext<any>(AuthContext);
 
 export const useAuthContext = () => React.useContext(AuthContext);
 
@@ -15,15 +24,15 @@ export const AuthContextProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const [user, setUser] = React.useState(null);
+    const [user, setUser] = React.useState<UserType>({ email: null, uid: null, photoURL: null, name: null});
     const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                setUser(user);
+                setUser({ email: user.email, uid: user.uid, photoURL: user.photoURL, name: user.displayName });
             } else {
-                setUser(null);
+                setUser({ email: null, uid: null, photoURL: null, name: null});
             }
             setLoading(false);
         });
