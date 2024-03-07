@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, getAdditionalUserInfo } from "firebase/auth";
 import { getAuth, updateProfile } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import { app, db } from "./config";
@@ -12,9 +12,24 @@ export function onAuthStateChanged(cb) {
 
 export async function googleSignIn() {
     const provider = new GoogleAuthProvider();
+    provider.addScope("https://www.googleapis.com/auth/user.birthday.read");
+    provider.addScope("https://www.googleapis.com/auth/userinfo.profile");
 
     try {
-        await signInWithPopup(auth, provider);
+        await signInWithPopup(auth, provider).then((result) => {
+            const additionalInfo = getAdditionalUserInfo(result);
+            const user = result.user;
+            const birthday = additionalInfo.profile;
+            console.log(birthday);
+            setDoc(doc(db, "users", user.uid), {
+                name: user.displayName,
+                email: user.email,
+                lists: [],
+                birthday: birthday
+            }).then(() => {
+                window.location.reload()
+            });
+        });
     } catch (error) {
         console.error("Error signing in with Google", error);
     }

@@ -49,7 +49,7 @@ export default function Settings() {
                                 <input onChange={(e) => setEmail(e.target.value)} type="text" className="grow" placeholder="Email" value={email} disabled/>
                             </label>
                             <div className="flex flex-row items-center gap-2">
-                                <select className="select select-bordered m-2 w-3/4">
+                                <select className="select select-bordered m-2 w-2/3">
                                     <option disabled selected>Month</option>
                                     <option>January</option>
                                     <option>February</option>
@@ -64,7 +64,7 @@ export default function Settings() {
                                     <option>November</option>
                                     <option>December</option>
                                 </select>
-                                <select className="select select-bordered m-2 w-1/4">
+                                <select className="select select-bordered m-2 w-1/3">
                                     <option disabled selected>Day</option>
                                     <option>1</option>
                                     <option>2</option>
