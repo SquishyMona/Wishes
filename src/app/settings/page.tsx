@@ -4,11 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Settings() {
+    const setTheme = (e: HTMLInputElement) => {
+        const root = document.getElementById('htmlroot');
+        root?.setAttribute('data-theme', e.checked ? 'mydarktheme' : 'mylighttheme');
+    }
+
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center mx-5">
             <h1 className="text-center text-3xl font-bold my-5">Settings</h1>
-            <div className="flex flex-col items-center bg-primary h-full mx-5 max-md:my-3 rounded-xl text-center p-3 min-w-[450px]">
-                <h1 className="text-2xl text-white my-3 font-bold">Profile</h1>
+            <div className="flex flex-col items-center bg-primary h-full mx-5 my-3 rounded-xl text-center p-3 w-4/5 max-w-[600px] min-w-[325px]">
+                <h1 className="text-2xl my-3 font-bold">Profile</h1>
                 <div className="flex flex-col sm:flex-row items-center">
                     <Image src="/accplaceholderdark.png" alt="Account" width={80} height={80} className="m-3" />
                     <div className="flex flex-col">
@@ -31,11 +36,44 @@ export default function Settings() {
                     <button className="btn btn-secondary m-3">Change Password</button>
                 </div>
             </div>
-            <div className="flex flex-col bg-primary h-full mx-5 max-md:my-3 rounded-xl text-center p-3 min-w-[450px]">
-                <h1 className="text-2xl text-white my-3 font-bold">Preferences</h1>
-                <div className="flex flex-col sm:flex-row items-center mx-5">
+            <div className="flex flex-col bg-primary h-full mx-5 my-3 rounded-xl text-center p-3 w-4/5 max-w-[600px] min-w-[325px]">
+                <h1 className="text-2xl my-3 font-bold">Preferences</h1>
+                <div className="flex flex-row items-center mx-5">
                     <label className="flex items-center gap-2 m-2">Dark Theme</label>
-                    <input type="checkbox" className="toggle toggle-secondary ml-auto" data-toggle-theme="mythemedark, mythemelight"/>
+                    <div className="tooltip flex ml-auto" data-tip="Coming Soon!">
+                        <input 
+                            type="checkbox" 
+                            className="toggle toggle-secondary" 
+                            onClick={(e) => setTheme(e.currentTarget)}
+                            checked disabled/>
+                    </div>
+                </div>
+            </div>
+            <div className="flex flex-col bg-primary h-full mx-5 my-3 rounded-xl text-center p-3 w-4/5 max-w-[600px] min-w-[325px]">
+                <h1 className="text-2xl my-3 font-bold">Defaults</h1>
+                <div className="flex flex-row items-center mx-3">
+                    <label className="flex items-center gap-2 m-2 text-start">Make my lists public</label>
+                    <input 
+                        type="checkbox" 
+                        className="toggle toggle-secondary ml-auto" />
+                </div>
+                <div className="flex flex-row items-center mx-3">
+                    <label className="flex items-center gap-2 m-2 text-start">Anyone can mark as purchased</label>
+                    <input 
+                        type="checkbox" 
+                        className="toggle toggle-secondary ml-auto" />
+                </div>
+                <div className="flex flex-row items-center mx-3">
+                    <label className="flex items-center gap-2 m-2 text-start">Make my list public</label>
+                    <input 
+                        type="checkbox" 
+                        className="toggle toggle-secondary ml-auto" />
+                </div>
+            </div>
+            <div className="flex flex-col bg-primary h-full mx-5 my-3 rounded-xl text-center p-3 w-4/5 max-w-[600px] min-w-[325px]">
+                <h1 className="text-2xl my-3 font-bold">Account Actions</h1>
+                <div className="flex flex-col items-center">
+                    <button className="btn btn-error m-3">Delete Account</button>
                 </div>
             </div>
         </div>

@@ -27,7 +27,7 @@ const config: Config = {
           "secondary": "#eab308",                   
           "accent": "#ca8a04",                   
           "neutral": "#44403c",                   
-          "base-100": "#f5f5f4",                   
+          "base-100": "#fef3c7",                   
           "info": "#60a5fa",                   
           "success": "#4ade80",                 
           "warning": "#f59e0b",               
