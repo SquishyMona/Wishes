@@ -1,19 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { getDoc, setDoc, doc, DocumentData } from "firebase/firestore";
+import { db } from "@/lib/firebase/config";
 import { useAuth } from "@/context/AuthContext";
+import { UserData } from "@/lib/interfaces/UserData";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
 export default function Settings() {
     const { user } = useAuth();
+    const [userData, setUserData] = useState<DocumentData>({});
     const [name, setName] = useState(user?.name ? user.name : '');
     const [email, setEmail] = useState(user?.email ? user.email : '');
+    const [birthday, setBirthday] = useState(userData?.birthday ? userData.birthday : '');
     const setTheme = (e: HTMLInputElement) => {
         const root = document.getElementById('htmlroot');
         root?.setAttribute('data-theme', e.checked ? 'mydarktheme' : 'mylighttheme');
     }
+
+    useEffect(() => {
+        if (user) {
+            const docRef = doc(db, "users", user.uid);
+            getDoc(docRef).then((doc) => {
+                if (doc.exists()) {
+                    setUserData(doc.data());
+                }
+            });
+        }
+    }, [user]);
 
     return (
         <ProtectedRoute>
@@ -32,11 +48,57 @@ export default function Settings() {
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" /><path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" /></svg>
                                 <input onChange={(e) => setEmail(e.target.value)} type="text" className="grow" placeholder="Email" value={email} disabled/>
                             </label>
-                            <select className="select select-bordered w-full max-w-xs">
-                                <option disabled selected>Who shot first?</option>
-                                <option>Han Solo</option>
-                                <option>Greedo</option>
-                            </select>
+                            <div className="flex flex-row items-center gap-2">
+                                <select className="select select-bordered m-2 w-3/4">
+                                    <option disabled selected>Month</option>
+                                    <option>January</option>
+                                    <option>February</option>
+                                    <option>March</option>
+                                    <option>April</option>
+                                    <option>May</option>
+                                    <option>June</option>
+                                    <option>July</option>
+                                    <option>August</option>
+                                    <option>September</option>
+                                    <option>October</option>
+                                    <option>November</option>
+                                    <option>December</option>
+                                </select>
+                                <select className="select select-bordered m-2 w-1/4">
+                                    <option disabled selected>Day</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                    <option>13</option>
+                                    <option>14</option>
+                                    <option>15</option>
+                                    <option>16</option>
+                                    <option>17</option>
+                                    <option>18</option>
+                                    <option>19</option>
+                                    <option>20</option>
+                                    <option>21</option>
+                                    <option>22</option>
+                                    <option>23</option>
+                                    <option>24</option>
+                                    <option>25</option>
+                                    <option>26</option>
+                                    <option>27</option>
+                                    <option>28</option>
+                                    <option>29</option>
+                                    <option>30</option>
+                                    <option>31</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div className="flex flex-col sm:flex-row items-center">

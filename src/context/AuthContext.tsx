@@ -3,13 +3,7 @@
 import React from 'react';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { app } from '@/lib/firebase/config';
-
-interface UserType {
-    email: string | null;
-    uid: string | null;
-    photoURL: string | null;
-    name: string | null;
-}
+import { UserType } from '@/lib/interfaces/UserData';
 
 const auth = getAuth(app);
 

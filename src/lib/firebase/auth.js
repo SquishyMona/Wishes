@@ -28,13 +28,14 @@ export async function emailSignIn(email, password) {
     }
 }
 
-export async function emailSignUp(email, password, name) {
+export async function emailSignUp(email, password, name, birthday) {
         try {
                 return createUserWithEmailAndPassword(auth, email, password).then(() => {
                         setDoc(doc(db, "users", auth.currentUser.uid), {
                                 name: name,
                                 email: email,
-                                lists: []
+                                lists: [],
+                                birthday: birthday
                         }).then(() => {
                                 updateProfile(auth.currentUser, {
                                         displayName: name
