@@ -6,7 +6,9 @@ import { getAuth } from "firebase/auth";
 import { signOut } from "@/lib/firebase/auth";
 import { app } from "@/lib/firebase/config";
 import { useRouter } from "next/navigation";
-import SignInForm from "@/components/auth/SignInForm";
+import CompleteProfile from "./CompleteProfile";
+import { use, useEffect } from "react";
+import AuthForm from "@/components/auth/AuthForm";
 
 export default function Navigation() {
   const router = useRouter();
@@ -15,6 +17,10 @@ export default function Navigation() {
     const checkbox: HTMLInputElement | null = document.getElementById('wishes-drawer-toggle') as HTMLInputElement;
     checkbox?.checked ? checkbox.checked = false : checkbox.checked = true;
   }
+
+  //useEffect(() => {
+  //  !auth.currentUser?.displayName ? (document.getElementById("completeProfileModal") as HTMLDialogElement)?.showModal() : null;
+  //}, []);
 
   return (
     <nav className="navbar bg-base-100 sticky top-0 z-10">
@@ -49,7 +55,8 @@ export default function Navigation() {
           </ul>
         </div>
       </div>
-      <SignInForm />
+      <AuthForm />
+      <CompleteProfile />
     </nav>
   );
 }
