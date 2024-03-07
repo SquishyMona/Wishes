@@ -12,20 +12,15 @@ export function onAuthStateChanged(cb) {
 
 export async function googleSignIn() {
     const provider = new GoogleAuthProvider();
-    provider.addScope("https://www.googleapis.com/auth/user.birthday.read");
-    provider.addScope("https://www.googleapis.com/auth/userinfo.profile");
-
     try {
         await signInWithPopup(auth, provider).then((result) => {
-            const additionalInfo = getAdditionalUserInfo(result);
             const user = result.user;
-            const birthday = additionalInfo.profile;
-            console.log(birthday);
             setDoc(doc(db, "users", user.uid), {
                 name: user.displayName,
                 email: user.email,
                 lists: [],
-                birthday: birthday
+                photoURL: user.photoURL,
+                birthday: ''
             }).then(() => {
                 window.location.reload()
             });

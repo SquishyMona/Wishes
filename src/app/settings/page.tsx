@@ -14,10 +14,19 @@ export default function Settings() {
     const [userData, setUserData] = useState<DocumentData>({});
     const [name, setName] = useState(user?.name ? user.name : '');
     const [email, setEmail] = useState(user?.email ? user.email : '');
-    const [birthday, setBirthday] = useState(userData?.birthday ? userData.birthday : '');
+    const [birthdayMonth, setBirthdayMonth] = useState(userData?.birthday ? userData.birthday : '');
+    const [birthdayDay, setBirthdayDay] = useState(userData?.birthday ? userData.birthday : '');
     const setTheme = (e: HTMLInputElement) => {
         const root = document.getElementById('htmlroot');
         root?.setAttribute('data-theme', e.checked ? 'mydarktheme' : 'mylighttheme');
+    }
+
+    const saveInformation = () => {
+        const docRef = doc(db, "users", user.uid);
+        setDoc(docRef, {
+            name: name,
+            birthday: birthday
+        }, { merge: true });
     }
 
     useEffect(() => {
@@ -38,7 +47,13 @@ export default function Settings() {
                 <div className="flex flex-col items-center bg-primary h-full mx-5 my-3 rounded-xl text-center p-3 w-4/5 max-w-[600px] min-w-[325px]">
                     <h1 className="text-2xl my-3 font-bold">Profile</h1>
                     <div className="flex flex-col sm:flex-row items-center">
-                        <Image src="/accplaceholderdark.png" alt="Account" width={80} height={80} className="m-3" />
+                        <button onClick={() => document.getElementById('settingsphotoupload')?.click()} className="relative items-center">
+                            <Image src={user.photoURL} alt="Account" width={80} height={80} className="m-3 rounded-full" />
+                            <span className="top-[70px] left-[70px] absolute w-5 h-5 bg-secondary rounded-full">
+                                <svg className="text-primary"  width="21" height="16" viewBox="0 -2.5 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />  <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" /></svg>                            
+                            </span>
+                            <input type="file" className="hidden" id="settingsphotoupload" accept=".png, .jpg, .jpeg, .heic"/>
+                        </button>
                         <div className="flex flex-col">
                             <label className="input input-bordered flex items-center gap-2 m-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" /></svg>
@@ -49,7 +64,7 @@ export default function Settings() {
                                 <input onChange={(e) => setEmail(e.target.value)} type="text" className="grow" placeholder="Email" value={email} disabled/>
                             </label>
                             <div className="flex flex-row items-center gap-2">
-                                <select className="select select-bordered m-2 w-2/3">
+                                <select id='settingsbirthmonth' onChange={(e) => setBirthdayMonth(e.target.value)} className="select select-bordered m-2 w-2/3">
                                     <option disabled selected>Month</option>
                                     <option>January</option>
                                     <option>February</option>
@@ -64,7 +79,7 @@ export default function Settings() {
                                     <option>November</option>
                                     <option>December</option>
                                 </select>
-                                <select className="select select-bordered m-2 w-1/3">
+                                <select id="settingsbirthday" className="select select-bordered m-2 w-1/3">
                                     <option disabled selected>Day</option>
                                     <option>1</option>
                                     <option>2</option>
@@ -102,7 +117,7 @@ export default function Settings() {
                         </div>
                     </div>
                     <div className="flex flex-col sm:flex-row items-center">
-                        <button className="btn btn-secondary m-3">Save Information</button>
+                        <button onClick={saveInformation} className="btn btn-secondary m-3">Save Information</button>
                         <button className="btn btn-secondary m-3">Change Password</button>
                     </div>
                 </div>

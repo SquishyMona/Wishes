@@ -44,7 +44,7 @@ export default function AuthForm() {
 
     const handleGoogleSignIn = () => {
         setLoading(true);
-        googleSignIn().then(() => window.location.reload());
+        googleSignIn();
     }
 
     return (
