@@ -1,6 +1,6 @@
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, getAdditionalUserInfo } from "firebase/auth";
 import { getAuth, updateProfile } from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, getDoc } from "firebase/firestore";
 import { app, db } from "./config";
 import { useRouter } from "next/navigation";
 
@@ -15,6 +15,12 @@ export async function googleSignIn() {
     try {
         await signInWithPopup(auth, provider).then((result) => {
             const user = result.user;
+            getDoc(doc(db, "users", user.uid)).then((doc) => {
+                if (doc.exists()) {
+                    window.location.reload()
+                    return;
+                }
+            });
             setDoc(doc(db, "users", user.uid), {
                 name: user.displayName,
                 email: user.email,

@@ -7,6 +7,10 @@ const nextConfig = {
             hostname: 'lh3.googleusercontent.com',
             port: '',
           },
+          {
+            protocol: 'http',
+            hostname: '127.0.0.1'
+          }
         ],
       },
 };

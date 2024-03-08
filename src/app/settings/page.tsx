@@ -2,26 +2,38 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { getDoc, setDoc, doc, DocumentData } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { useAuth } from "@/context/AuthContext";
-import { UserData } from "@/lib/interfaces/UserData";
+import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import PhotoConfirmModal from "@/components/settings/PhotoConfirmModal";
 
 export default function Settings() {
     const { user } = useAuth();
+    const router = useRouter();
     const [userData, setUserData] = useState<DocumentData>({});
     const [name, setName] = useState(user?.name ? user.name : '');
     const [email, setEmail] = useState(user?.email ? user.email : '');
-    const [birthdayMonth, setBirthdayMonth] = useState(userData?.birthday ? userData.birthday : '');
-    const [birthdayDay, setBirthdayDay] = useState(userData?.birthday ? userData.birthday : '');
+    const [birthdayMonth, setBirthdayMonth] = useState('');
+    const [birthdayDay, setBirthdayDay] = useState('');
+    const [photo, setPhoto] = useState('');
     const setTheme = (e: HTMLInputElement) => {
         const root = document.getElementById('htmlroot');
         root?.setAttribute('data-theme', e.checked ? 'mydarktheme' : 'mylighttheme');
     }
 
+    const handlePhotoSelection = () => {
+        const photoUpload = document.getElementById('settingsphotoupload') as HTMLInputElement;
+        if (photoUpload.files != null) {
+            setPhoto(URL.createObjectURL(photoUpload.files[0]));
+            const photoConfirmModal = document.getElementById('photoConfirmModal') as HTMLDialogElement;
+            photoConfirmModal.showModal();
+        }
+    }
+
     const saveInformation = () => {
+        const birthday = `${birthdayMonth}/${birthdayDay}`;
         const docRef = doc(db, "users", user.uid);
         setDoc(docRef, {
             name: name,
@@ -35,8 +47,13 @@ export default function Settings() {
             getDoc(docRef).then((doc) => {
                 if (doc.exists()) {
                     setUserData(doc.data());
+                    setBirthdayDay(doc.data().birthday.split('/')[1]);
+                    setBirthdayMonth(doc.data().birthday.split('/')[0]);
                 }
             });
+        }
+        else {
+            router.push('/');
         }
     }, [user]);
 
@@ -48,11 +65,11 @@ export default function Settings() {
                     <h1 className="text-2xl my-3 font-bold">Profile</h1>
                     <div className="flex flex-col sm:flex-row items-center">
                         <button onClick={() => document.getElementById('settingsphotoupload')?.click()} className="relative items-center">
-                            <Image src={user.photoURL} alt="Account" width={80} height={80} className="m-3 rounded-full" />
+                            <Image id='settingspfp' src={user.photoURL != null ? user.photoURL : '/accplaceholderdark.png'} alt="Account" width={80} height={80} className="m-3 rounded-full" />
                             <span className="top-[70px] left-[70px] absolute w-5 h-5 bg-secondary rounded-full">
                                 <svg className="text-primary"  width="21" height="16" viewBox="0 -2.5 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />  <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" /></svg>                            
                             </span>
-                            <input type="file" className="hidden" id="settingsphotoupload" accept=".png, .jpg, .jpeg, .heic"/>
+                            <input type="file" onChange={handlePhotoSelection} className="hidden" id="settingsphotoupload" accept=".png, .jpg, .jpeg, .heic"/>
                         </button>
                         <div className="flex flex-col">
                             <label className="input input-bordered flex items-center gap-2 m-2">
@@ -162,6 +179,7 @@ export default function Settings() {
                     </div>
                 </div>
             </div>
+            <PhotoConfirmModal photo={photo}/>
         </ProtectedRoute>
     )
 }
