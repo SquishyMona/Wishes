@@ -8,15 +8,15 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import PhotoConfirmModal from "@/components/settings/PhotoConfirmModal";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function Settings() {
     const { user } = useAuth();
     const router = useRouter();
-    const [userData, setUserData] = useState<DocumentData>({});
     const [name, setName] = useState(user?.name ? user.name : '');
     const [email, setEmail] = useState(user?.email ? user.email : '');
-    const [birthdayMonth, setBirthdayMonth] = useState('');
-    const [birthdayDay, setBirthdayDay] = useState('');
+    const [birthday, setBirthday] = useState(user?.birthday != null ? user.birthday.toDate() : null);
     const [photo, setPhoto] = useState('');
     const setTheme = (e: HTMLInputElement) => {
         const root = document.getElementById('htmlroot');
@@ -33,29 +33,21 @@ export default function Settings() {
     }
 
     const saveInformation = () => {
-        const birthday = `${birthdayMonth}/${birthdayDay}`;
+        const newBirthday = birthday;
+        console.error(newBirthday);
         const docRef = doc(db, "users", user.uid);
         setDoc(docRef, {
             name: name,
-            birthday: birthday
+            birthday: newBirthday
         }, { merge: true });
     }
 
     useEffect(() => {
-        if (user) {
-            const docRef = doc(db, "users", user.uid);
-            getDoc(docRef).then((doc) => {
-                if (doc.exists()) {
-                    setUserData(doc.data());
-                    setBirthdayDay(doc.data().birthday.split('/')[1]);
-                    setBirthdayMonth(doc.data().birthday.split('/')[0]);
-                }
-            });
-        }
-        else {
+        console.error(user);
+        if (user === null) {
             router.push('/');
         }
-    }, [user]);
+    });
 
     return (
         <ProtectedRoute>
@@ -65,7 +57,7 @@ export default function Settings() {
                     <h1 className="text-2xl my-3 font-bold">Profile</h1>
                     <div className="flex flex-col sm:flex-row items-center">
                         <button onClick={() => document.getElementById('settingsphotoupload')?.click()} className="relative items-center">
-                            <Image id='settingspfp' src={user.photoURL != null ? user.photoURL : '/accplaceholderdark.png'} alt="Account" width={80} height={80} className="m-3 rounded-full" />
+                            <Image id='settingspfp' src={user?.photoURL != null ? user.photoURL : '/accplaceholderdark.png'} alt="Account" width={80} height={80} className="m-3 rounded-full" />
                             <span className="top-[70px] left-[70px] absolute w-5 h-5 bg-secondary rounded-full">
                                 <svg className="text-primary"  width="21" height="16" viewBox="0 -2.5 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />  <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" /></svg>                            
                             </span>
@@ -80,57 +72,10 @@ export default function Settings() {
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" /><path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" /></svg>
                                 <input onChange={(e) => setEmail(e.target.value)} type="text" className="grow" placeholder="Email" value={email} disabled/>
                             </label>
-                            <div className="flex flex-row items-center gap-2">
-                                <select id='settingsbirthmonth' onChange={(e) => setBirthdayMonth(e.target.value)} className="select select-bordered m-2 w-2/3">
-                                    <option disabled selected>Month</option>
-                                    <option>January</option>
-                                    <option>February</option>
-                                    <option>March</option>
-                                    <option>April</option>
-                                    <option>May</option>
-                                    <option>June</option>
-                                    <option>July</option>
-                                    <option>August</option>
-                                    <option>September</option>
-                                    <option>October</option>
-                                    <option>November</option>
-                                    <option>December</option>
-                                </select>
-                                <select id="settingsbirthday" className="select select-bordered m-2 w-1/3">
-                                    <option disabled selected>Day</option>
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                    <option>8</option>
-                                    <option>9</option>
-                                    <option>10</option>
-                                    <option>11</option>
-                                    <option>12</option>
-                                    <option>13</option>
-                                    <option>14</option>
-                                    <option>15</option>
-                                    <option>16</option>
-                                    <option>17</option>
-                                    <option>18</option>
-                                    <option>19</option>
-                                    <option>20</option>
-                                    <option>21</option>
-                                    <option>22</option>
-                                    <option>23</option>
-                                    <option>24</option>
-                                    <option>25</option>
-                                    <option>26</option>
-                                    <option>27</option>
-                                    <option>28</option>
-                                    <option>29</option>
-                                    <option>30</option>
-                                    <option>31</option>
-                                </select>
-                            </div>
+                            <label className="input input-bordered flex items-center gap-2 m-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-cake" viewBox="0 0 16 16"><path d="m7.994.013-.595.79a.747.747 0 0 0 .101 1.01V4H5a2 2 0 0 0-2 2v3H2a2 2 0 0 0-2 2v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a2 2 0 0 0-2-2h-1V6a2 2 0 0 0-2-2H8.5V1.806A.747.747 0 0 0 8.592.802zM4 6a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v.414a.9.9 0 0 1-.646-.268 1.914 1.914 0 0 0-2.708 0 .914.914 0 0 1-1.292 0 1.914 1.914 0 0 0-2.708 0A.9.9 0 0 1 4 6.414zm0 1.414c.49 0 .98-.187 1.354-.56a.914.914 0 0 1 1.292 0c.748.747 1.96.747 2.708 0a.914.914 0 0 1 1.292 0c.374.373.864.56 1.354.56V9H4zM1 11a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v.793l-.354.354a.914.914 0 0 1-1.293 0 1.914 1.914 0 0 0-2.707 0 .914.914 0 0 1-1.292 0 1.914 1.914 0 0 0-2.708 0 .914.914 0 0 1-1.292 0 1.914 1.914 0 0 0-2.708 0 .914.914 0 0 1-1.292 0L1 11.793zm11.646 1.854a1.915 1.915 0 0 0 2.354.279V15H1v-1.867c.737.452 1.715.36 2.354-.28a.914.914 0 0 1 1.292 0c.748.748 1.96.748 2.708 0a.914.914 0 0 1 1.292 0c.748.748 1.96.748 2.707 0a.914.914 0 0 1 1.293 0Z"/></svg>
+                                <DatePicker placeholderText="Birthday" selected={birthday} dateFormat="MMMM d, y" onChange={(e) => setBirthday(e)} />
+                            </label>
                         </div>
                     </div>
                     <div className="flex flex-col sm:flex-row items-center">

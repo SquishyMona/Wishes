@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" id="htmlroot" data-theme="mydarktheme">
-      <body className={`${inter.className} ${tenor_sans.variable} ${asap.variable}`}>
+      <body className={`${inter.className} ${tenor_sans.variable} ${asap.variable} min-h-screen`}>
         <AuthContextProvider>
           <Navigation />
           <div className="h-[80vh]">
@@ -30,7 +30,7 @@ export default function RootLayout({
               <div className="drawer-content md:h-[85vh]">
                 {children}
               </div> 
-              <div className="drawer-side">
+              <div className="drawer-side z-20 md:z-0">
                 <label htmlFor="wishes-drawer-toggle" aria-label="close sidebar" className="drawer-overlay"></label> 
                 <div className="w-3/4 md:w-full md:mx-3">
                   <AllLists />  

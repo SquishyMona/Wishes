@@ -3,6 +3,7 @@ export interface UserType {
     uid: string | null;
     photoURL: string | null;
     name: string | null;
+    birthday: Date | null;
 }
 
 export interface UserData {

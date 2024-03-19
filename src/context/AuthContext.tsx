@@ -5,6 +5,8 @@ import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { app } from '@/lib/firebase/config';
 import { UserType } from '@/lib/interfaces/UserData';
 import { GridLoader } from 'react-spinners';
+import { getDoc, doc } from 'firebase/firestore';
+import { db } from '@/lib/firebase/config';
 
 const auth = getAuth(app);
 
@@ -25,7 +27,13 @@ export const AuthContextProvider = ({
     React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                setUser({ email: user.email, uid: user.uid, photoURL: user.photoURL, name: user.displayName });
+                try {
+                    getDoc(doc(db, 'users', user.uid)).then((doc) => {
+                        setUser({ email: user.email, uid: user.uid, photoURL: user.photoURL, name: user.displayName, birthday: doc.data()?.birthday});
+                    });
+                } catch (error) {
+                    console.error(error);
+                }
             } else {
                 setUser(null);
             }
@@ -38,8 +46,10 @@ export const AuthContextProvider = ({
     return (
         <AuthContext.Provider value={{ user }}>
             {loading ? 
-            <div className='absolute top-[46%] left-[46%]'>
-                <GridLoader color='#fef08a' />
+            <div className='flex w-full min-h-screen m-auto justify-center items-center'>
+                <div className='flex'>
+                    <GridLoader color='#fef08a' />
+                </div>
             </div> : children}
         </AuthContext.Provider>
     );
